@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: combined-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: combined-apps
+  template:
+    metadata:
+      labels:
+        app: combined-apps
+    spec:
+      containers:
+      - name: inventory
+        image: chunyiwang.azurecr.io/inventory:1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DATABASE_URL
+      - name: book-catalog
+        image: chunyiwang.azurecr.io/book-catalog:1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DATABASE_URL

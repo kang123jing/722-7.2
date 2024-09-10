@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-inventory
+  template:
+    metadata:
+      labels:
+        app: book-inventory
+    spec:
+      containers:
+      - name: inventory
+        image: jingkang.azurecr.io/inventory:2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DATABASE_URL
+      - name: book-catalog
+        image: jingkang.azurecr.io/book:4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 81
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DATABASE_URL

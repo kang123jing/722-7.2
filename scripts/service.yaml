@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: combined-loadbalancer-service
+spec:
+  selector:
+    app: combined-apps  
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80
+      name: inventory-port
+    - protocol: TCP
+      port: 8081
+      targetPort: 80
+      name: book-catalog-port
+  type: LoadBalancer   

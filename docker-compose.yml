@@ -1,0 +1,31 @@
+# Your Solution
+version: '3'
+
+services:
+  book-catalog:
+    image: book-catalog:4
+    container_name: book_catalog
+    networks:
+      books:
+        ipv4_address: 172.20.0.2
+    ports:
+      - "80:80"
+    environment:
+      - DATABASE_URL=postgresql://mydatabase_945q_user:8Z0Xrnkykb0xPaMZZUUHy4Nw9cnCVOK5@dpg-crcj6vqj1k6c73cn4eug-a.oregon-postgres.render.com/mydatabase_945q
+
+  inventory:
+    image: inventory:11
+    container_name: inventory_management
+    networks:
+      books:
+        ipv4_address: 172.20.0.3
+    ports:
+      - "81:80"
+    environment:
+      - DATABASE_URL=postgresql://mydatabase_945q_user:8Z0Xrnkykb0xPaMZZUUHy4Nw9cnCVOK5@dpg-crcj6vqj1k6c73cn4eug-a.oregon-postgres.render.com/mydatabase_945q
+
+networks:
+  books:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
